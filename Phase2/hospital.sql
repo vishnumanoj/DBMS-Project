@@ -1,0 +1,101 @@
+drop database hospital;
+
+create database hospital;
+
+\c hospital;
+
+CREATE TABLE Admin (
+ Admin_ID INT PRIMARY KEY NOT NULL,
+ First_Name VARCHAR(40) NOT NULL,
+ Last_Name VARCHAR(40) NOT NULL,
+ Age INT NOT NULL,
+ Salary INT NOT NULL,
+JoiningDate DATE NOT NULL
+);
+
+CREATE TABLE Patient (
+ Patient_ID INT PRIMARY KEY NOT NULL,
+ Doctor_ID INT NOT NULL,
+ Nurse_ID INT,   
+ First_Name VARCHAR(40) NOT NULL,
+ Last_Name VARCHAR(40) NOT NULL,
+ Age INT NOT NULL,
+ Disease VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Doctor (
+ Doctor_ID INT PRIMARY KEY NOT NULL,
+ First_Name VARCHAR(40) NOT NULL,
+ Last_Name VARCHAR(40) NOT NULL,
+ Department_ID VARCHAR(40) NOT NULL,
+Patient_ID INT NOT NULL,
+Nurse_ID INT NOT NULL,
+Assistant_ID INT NOT NULL,
+ Age INT NOT NULL,
+Salary INT NOT NULL,
+JoiningDate DATE NOT NULL
+ );
+
+CREATE TABLE Nurse (
+ Nurse_ID INT PRIMARY KEY NOT NULL,
+Patient_ID INT NOT NULL,
+Doctor_ID INT NOT NULL,
+First_Name VARCHAR(40) NOT NULL,
+ Last_Name VARCHAR(40) NOT NULL,
+ Age INT NOT NULL,
+Salary INT NOT NULL,
+JoiningDate DATE NOT NULL
+);
+
+CREATE TABLE Assistant (
+ Assistant_ID INT PRIMARY KEY NOT NULL,
+Patient_ID INT NOT NULL,
+Nurse_ID INT NOT NULL,
+Doctor_ID INT NOT NULL,
+First_Name VARCHAR(40) NOT NULL,
+ Last_Name VARCHAR(40) NOT NULL,
+ Age INT NOT NULL,
+Salary INT NOT NULL,
+JoiningDate DATE NOT NULL
+);
+
+CREATE TABLE Controls(
+Admin_ID INT NOT NULL,
+Patient_ID INT NOT NULL,
+Nurse_ID INT NOT NULL,
+Doctor_ID INT NOT NULL,
+Assistant_ID INT NOT NULL,
+CONSTRAINT FK_Admin FOREIGN KEY(Admin_ID) REFERENCES Admin(Admin_ID),
+CONSTRAINT FK_Patient FOREIGN KEY(Patient_ID) REFERENCES Patient(Patient_ID),
+CONSTRAINT FK_Nurse FOREIGN KEY(Nurse_ID) REFERENCES Nurse(Nurse_ID),
+CONSTRAINT FK_Doctor FOREIGN KEY(Doctor_ID) REFERENCES Doctor(Doctor_ID),
+CONSTRAINT FK_Assistant FOREIGN KEY(Assistant_ID) REFERENCES Assistant(Assistant_ID)
+);
+
+CREATE TABLE Helps(
+Nurse_ID INT NOT NULL,
+Patient_ID INT NOT NULL,
+CONSTRAINT FK_Patient FOREIGN KEY(Patient_ID) REFERENCES Patient(Patient_ID),
+CONSTRAINT FK_Nurse FOREIGN KEY(Nurse_ID) REFERENCES Nurse(Nurse_ID)
+);
+
+CREATE TABLE Treats(
+Doctor_ID INT NOT NULL,
+Patient_ID INT NOT NULL,
+CONSTRAINT FK_Doctor FOREIGN KEY(Doctor_ID) REFERENCES Doctor(Doctor_ID),
+CONSTRAINT FK_Patient FOREIGN KEY(Patient_ID) REFERENCES Patient(Patient_ID)
+);
+
+CREATE TABLE Instructs(
+Doctor_ID INT NOT NULL,
+Assistant_ID INT NOT NULL,
+CONSTRAINT FK_Doctor FOREIGN KEY(Doctor_ID) REFERENCES Doctor(Doctor_ID),
+CONSTRAINT FK_Assistant FOREIGN KEY(Assistant_ID) REFERENCES Assistant(Assistant_ID)
+);
+
+CREATE TABLE Guides(
+Nurse_ID INT NOT NULL,
+Assistant_ID INT NOT NULL,
+CONSTRAINT FK_Nurse FOREIGN KEY(Nurse_ID) REFERENCES Nurse(Nurse_ID),
+CONSTRAINT FK_Assistant FOREIGN KEY(Assistant_ID) REFERENCES Assistant(Assistant_ID)
+);
